@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<GridPane prefHeight="250" prefWidth="350.0"
+          xmlns="http://javafx.com/javafx/8.0.171"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="cn.edu.sustech.cs209.chatting.client.ReminderController"
+          id="gridPane" BorderPane.alignment="CENTER" stylesheets="@styles/ReminderStyles.css">
+    <columnConstraints>
+        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="370.0" minWidth="320.0"
+                           prefWidth="350.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="250.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <StackPane prefWidth="350.0" prefHeight="150.0" GridPane.rowIndex="0">
+        <Label id="RightLabel" stylesheets="@styles/ReminderStyles.css"
+               prefWidth="150.0" prefHeight="140.0"/>
+    </StackPane>
+
+    <GridPane prefWidth="350.0" prefHeight="100.0" GridPane.rowIndex="1">
+        <columnConstraints>
+            <ColumnConstraints prefWidth="100.0"/>
+            <ColumnConstraints maxWidth="370.0" minWidth="220.0" prefWidth="150.0"/>
+            <ColumnConstraints prefWidth="100.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label wrapText="true" text="New Message!"
+                   id="TextLabel" stylesheets="@styles/ReminderStyles.css"/>
+        </StackPane>
+        <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button fx:id="viewButton" wrapText="true" text="View"
+                    onMouseClicked="#handleViewClick" onMouseEntered="#handleViewEnter" onMouseExited="#handleViewExit"
+                    id="viewButton" stylesheets="@styles/ReminderStyles.css"/>
+        </StackPane>
+    </GridPane>
+</GridPane>

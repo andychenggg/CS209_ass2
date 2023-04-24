@@ -1,0 +1,70 @@
+#RootVBOX{
+    -fx-background-image: url("../image/Mainbg.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#avatar{
+    -fx-background-image: url("../image/Avatar1.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#ChatRoom{
+    -fx-background-image: url("../image/ChatRoom.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#Welcome{
+    -fx-alignment: center-right;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 13;
+    -fx-text-fill: #F57130;
+    font-weight: bold
+
+}
+#MyName{
+    -fx-font-family: "Impact";
+    -fx-font-size: 16;
+    font-weight: bold
+}
+#OnlineCnt{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 11;
+}
+
+#PrivateAdd{
+    -fx-background-image: url("../image/Add2.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+
+}
+#PrivateHBox {
+    -fx-border-color: #0DAFFF;
+    -fx-border-width: 2px;
+}
+#PrivateChat{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 28;
+    -fx-text-fill: #0DAFFF;
+}
+#GroupAdd{
+    -fx-background-image: url("../image/Add2.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#GroupHBox {
+    -fx-border-color: #0DAFFF;
+    -fx-border-width: 2px;
+}
+#GroupChat{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 28;
+    -fx-text-fill: #0DAFFF;
+}
+#users{
+    -fx-background-color: transparent;
+}

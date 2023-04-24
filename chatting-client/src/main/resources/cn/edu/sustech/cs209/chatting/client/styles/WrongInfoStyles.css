@@ -1,0 +1,14 @@
+#gridPane{
+    -fx-background-image: url("../image/WrongInfoBG.png");
+    -fx-background-size: stretch;
+}
+#WrongLabel{
+    -fx-background-image: url("../image/WrongIm.png");
+    -fx-background-size: stretch;
+    -fx-background-color: transparent;
+}
+#WrongTextLabel{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}

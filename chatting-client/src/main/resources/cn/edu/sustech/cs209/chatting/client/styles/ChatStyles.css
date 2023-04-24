@@ -1,0 +1,135 @@
+#vBox{
+    -fx-background-image: url("../image/Mainbg.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#Person1{
+    -fx-background-image: url("../image/Avatar1.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+/*#Person1{*/
+/*    -fx-background-image: url("../image/Avatar1.png");*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*}*/
+/*#Person2{*/
+/*    -fx-background-image: url("../image/Avatar1.png");*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*}*/
+/*#Person3{*/
+/*    -fx-background-image: url("../image/Avatar1.png");*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*}*/
+/*#Person4{*/
+/*    -fx-background-image: url("../image/Avatar1.png");*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*}*/
+/*#Person5{*/
+/*    -fx-background-image: url("../image/Avatar1.png");*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*}*/
+/*#Person6{*/
+/*    -fx-background-image: url("../image/Avatar1.png");*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*}*/
+
+.tab1{
+    -fx-background-color: transparent;
+    -fx-background-image: url("../image/Chat.png");
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-focus-color: transparent;
+    -fx-border-color: #0A7BFD;
+    -fx-border-width: 3px;
+    -fx-border-insets: 0px 0px -3px 0px;
+}
+/*.tab2{*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-image: url("../image/emoji.png");*/
+/*    -fx-background-size: stretch;*/
+/*    -fx-background-position: center;*/
+/*    -fx-background-repeat: no-repeat;*/
+/*    -fx-pref-width: 30px;*/
+/*    -fx-pref-height: 30px;*/
+/*    -fx-focus-color: transparent;*/
+/*}*/
+.tab3{
+    -fx-background-color: transparent;
+    -fx-background-image: url("../image/File.png");
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-focus-color: transparent;
+}
+/*.tab-pane > .tab-header-area {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+    /*-fx-opacity: 0;*/
+}
+#TextPane{
+    -fx-border-color: #0A7BFD;
+    -fx-border-width: 6px;
+}
+#SendButton{
+    -fx-pref-height: 30;
+    -fx-pref-width: 80;
+    -fx-background-color: transparent;
+    -fx-border-radius: 10px;
+    -fx-border-color: #0A7BFD;
+    -fx-alignment: center;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 13;
+    -fx-text-fill: #0A7BFD;
+}
+
+.tab-pane{
+    -fx-padding: 10 10 10 10;
+    -fx-background-color: transparent;
+    -fx-background-image: url("../image/GroupBG.png");
+}
+
+#label{
+    -fx-font-family: "EmojiOne";
+    -fx-font-size: 24;
+}
+#browseButton{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 23;
+    -fx-text-fill: #0A7BFD;
+    -fx-background-color: transparent;
+}
+#fileLabel{
+    -fx-background-color: transparent;
+    -fx-background-image: url("../image/File1.png");
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#filePane{
+    -fx-border-color: #0A7BFD;
+    -fx-border-width: 6px;
+}
+#fileBox{
+    -fx-border-color: white;
+    -fx-border-width: 6px;
+}

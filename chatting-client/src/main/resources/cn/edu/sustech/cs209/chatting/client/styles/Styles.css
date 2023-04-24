@@ -1,0 +1,58 @@
+#chatRoom {
+    -fx-background-image: url("../image/ChatRoom.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+}
+#gridPane {
+    -fx-background-image: url("../image/loginbackground.png") ;
+    -fx-background-size: cover;
+
+}
+#username {
+    -fx-background-image: url("../image/username.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#password {
+    -fx-background-image: url("../image/password.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#service{
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-border-color: #000000;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-alignment: center;
+}
+#hostname {
+    -fx-background-image: url("../image/hostname.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#port {
+    -fx-background-image: url("../image/port.png");
+    -fx-background-color: transparent;
+    -fx-background-size: stretch;
+    -fx-background-position: center;
+}
+#loginButton {
+    -fx-background-image: url("../image/login.png");
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: cover;
+}
+#signupButton {
+    -fx-background-image: url("../image/signup.png");
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: stretch;
+}

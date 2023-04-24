@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="450" prefWidth="420.0"
+      xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="cn.edu.sustech.cs209.chatting.client.LoginController">
+
+    <GridPane id="gridPane" BorderPane.alignment="CENTER" stylesheets="@styles/Styles.css">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0"
+                               prefWidth="103.0"/>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0"
+                               prefWidth="210.0"/>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0"
+                               prefWidth="103.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="226.0" minHeight="10.0" prefHeight="133.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="126.0" minHeight="12.0" prefHeight="50.0"/>
+            <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="127.0" minHeight="0.0" prefHeight="50.0" valignment="CENTER"/>
+            <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="50.0"/>
+            <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="40.0"/>
+            <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="30.0"/>
+        </rowConstraints>
+        <Label id="chatRoom" prefHeight="130" prefWidth="130.0" stylesheets="@styles/Styles.css"
+               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <StackPane prefWidth="103.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <Label id="username" stylesheets="@styles/Styles.css"
+                   prefHeight="50" prefWidth="50"
+                   />
+        </StackPane>
+        <TextField fx:id="usernameTextField"
+                   prefWidth="188.0" prefHeight="20"
+                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+        <StackPane prefWidth="103.0" GridPane.columnIndex="0" GridPane.rowIndex="4">
+            <Label id="password" stylesheets="@styles/Styles.css"
+                   prefHeight="50" prefWidth="50"
+            />
+        </StackPane>
+        <PasswordField fx:id="passwordTextField"
+                   prefWidth="188.0" prefHeight="20"
+                   GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+        <Label id="service"
+               prefHeight="50.0" prefWidth="188.0"
+               stylesheets="@styles/Styles.css"
+               text="Server Details" textFill="#000000"
+               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+        <StackPane prefWidth="103.0" GridPane.columnIndex="0" GridPane.rowIndex="6">
+            <Label id="hostname" stylesheets="@styles/Styles.css"
+                   prefHeight="50.0" prefWidth="90.0"/>
+        </StackPane>
+        <TextField fx:id="hostnameTextField"
+                   prefWidth="188.0" prefHeight="20"
+                   text="localhost"
+                   GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+        <StackPane prefWidth="103.0" GridPane.columnIndex="0" GridPane.rowIndex="7">
+            <Label id="port" stylesheets="@styles/Styles.css"
+                   prefHeight="40.0" prefWidth="90.0"/>
+        </StackPane>
+
+        <TextField fx:id="portTextField"
+                   prefWidth="188.0" prefHeight="20"
+                   text="6666"
+                   GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+        <GridPane GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints />
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+            </rowConstraints>
+            <Button fx:id="loginButton" id="loginButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                    onAction="#handleLoginAction"  prefHeight="30" prefWidth="90"
+                    GridPane.columnIndex="0" stylesheets="@styles/Styles.css">
+            </Button>
+            <Label style="-fx-background-color: transparent;" prefHeight="30" prefWidth="30"
+                   GridPane.columnIndex="1">
+            </Label>
+            <Button fx:id="signButton" id="signupButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                    onAction="#handleSignupAction"  prefHeight="30" prefWidth="90"
+                    GridPane.columnIndex="2" stylesheets="@styles/Styles.css">
+            </Button>
+        </GridPane>
+    </GridPane>
+</VBox>

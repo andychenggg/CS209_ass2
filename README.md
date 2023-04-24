@@ -57,7 +57,7 @@ one or more clients.
 Please find the `Main` class under the `chatting-server` model, implement your `ServerSocket`,
 and run the `main` method.
 
-### Run the Client
+### Run the Clients
 
 If you are using JDK 1.8 with JavaFX bundled, you may find the `Main` class under the `chatting-client` model,
 and run the `main` method to start a client.
@@ -73,7 +73,7 @@ Alternatively, you can find the goal in the plugin list, and click on it:
 
 ## Tasks
 
-- [ ] Server & Client (70 pt)
+- [ ] Server & Clients (70 pt)
 - [ ] JavaFX GUI (15 pt)
 - [ ] Exception handling (15 pt)
 - [ ] Bonus (12 pt)

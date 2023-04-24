@@ -1,0 +1,27 @@
+#gridPane{
+    -fx-background-image: url("../image/WrongInfoBG.png");
+    -fx-background-size: stretch;
+}
+#RightLabel{
+    -fx-background-image: url("../image/Reminder.png");
+    -fx-background-size: stretch;
+    -fx-background-color: transparent;
+}
+#TextLabel{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0A7BFD;
+    /*-fx-text-alignment: ;*/
+}
+#viewButton{
+    -fx-pref-height: 30;
+    -fx-pref-width: 80;
+    -fx-background-color: transparent;
+    -fx-border-radius: 10px;
+    -fx-border-color: #0A7BFD;
+    -fx-alignment: center;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 13;
+    -fx-text-fill: #0A7BFD;
+}

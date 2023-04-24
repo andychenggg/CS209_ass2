@@ -1,78 +1,302 @@
 package cn.edu.sustech.cs209.chatting.client;
 
+import cn.edu.sustech.cs209.chatting.common.Client;
+import cn.edu.sustech.cs209.chatting.common.HugeMessage;
 import cn.edu.sustech.cs209.chatting.common.Message;
+import cn.edu.sustech.cs209.chatting.common.MessageRecord;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller implements Initializable {
+    Lock lk = new ReentrantLock();
+    boolean isModified = false;
+    InputStream inputStream;
+    OutputStream outputStream;
+    String s = "111";
+    ObservableList<Client> onlineClients = FXCollections.observableArrayList();
 
-    @FXML
-    ListView<Message> chatContentList;
+    @FXML private ListView<Client> userContentList;
+    @FXML private Label currentOnlineCnt;
+    @FXML private HBox privateHBox;
+    @FXML private HBox groupHBox;
+    @FXML private Button privateAdd;
+    @FXML private Button groupAdd;
+    @FXML private Label avatar;
+    @FXML private Label username;
+    private CopyOnWriteArraySet<Client> selectedUsers = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArraySet<String> selectedUsername = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArrayList<CheckBox> currentCheckBoxes = new CopyOnWriteArrayList<>();
+    // every set in currentGroups contain the current user
+    private ConcurrentHashMap<Set<String>, Stage> currentGroups = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Set<String>, ChatController> currentControllers = new ConcurrentHashMap<>();
+    private CopyOnWriteArrayList<String> mostRecentMap = new CopyOnWriteArrayList<>();
+    private MessageRecord messageRecord;
 
-    String username;
+    Client user;
+
+    public ChatController getChatCTR(Set<String> cls){
+        return currentControllers.get(cls);
+    }
+
+    synchronized public void updateOnlineClient(Collection<Client> clients){
+        clients.removeIf(c -> c.getUserName().equals(user.getUserName()));
+        Platform.runLater(() -> currentOnlineCnt.setText("Online: "+clients.size()));
+        Platform.runLater(() -> {
+            onlineClients.setAll(clients);
+            onlineClients.sort((e1, e2) -> {
+                if(!mostRecentMap.contains(e1.getUserName()) && !mostRecentMap.contains(e2.getUserName())){
+                    return 0;
+                }
+                else if(!mostRecentMap.contains(e1.getUserName())){
+                    return +1;
+                }
+                else if(!mostRecentMap.contains(e2.getUserName())){
+                    return -1;
+                }
+                else {
+                    return mostRecentMap.indexOf(e1.getUserName()) - mostRecentMap.indexOf(e2.getUserName());
+                }
+            });
+        });
+    }
+
+    synchronized public void removeOnlineClient(Client removable){
+        Platform.runLater(() -> onlineClients.remove(removable));
+    }
+    synchronized public void putClientAhead(Collection<String> recent){
+        Platform.runLater(() -> {
+            CopyOnWriteArraySet<Client> cl = new CopyOnWriteArraySet<>();
+            onlineClients.removeIf(c -> {
+                if(c != null && recent.contains(c.getUserName())){
+                    cl.add(c);
+                    return true;
+                }
+                return false;
+            });
+            cl.forEach(c -> onlineClients.add(0, c));
+        });
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        Dialog<String> dialog = new TextInputDialog();
-        dialog.setTitle("Login");
-        dialog.setHeaderText(null);
-        dialog.setContentText("Username:");
-
-        Optional<String> input = dialog.showAndWait();
-        if (input.isPresent() && !input.get().isEmpty()) {
-            /*
-               TODO: Check if there is a user with the same name among the currently logged-in users,
-                     if so, ask the user to change the username
-             */
-            username = input.get();
-        } else {
-            System.out.println("Invalid username " + input + ", exiting");
-            Platform.exit();
+        userContentList.setCellFactory(new UserCellFactory());
+        userContentList.setItems(onlineClients);
+    }
+    public void initializeClient(Client client){
+        user = client;
+        messageRecord = new MessageRecord(user.getUserName());
+        username.setText(user.getUserName());
+        ImageView iv = new ImageView(user.getAvatar());
+        iv.setFitHeight(60);
+        iv.setFitWidth(60);
+        avatar.setGraphic(iv);
+    }
+    public void showWrongMessageInController(String s){
+        FXMLLoader wrongLoader = new FXMLLoader(getClass().getResource("WrongInfoPopup.fxml"));
+        Stage wrongStage = new Stage();
+        try {
+            wrongStage.setScene(new Scene(wrongLoader.load()));
+            WrongMessageController sc = wrongLoader.getController();
+            sc.setWrongTextLabel(s);
+        }catch (IOException e1){
+            return;
         }
+        wrongStage.initModality(Modality.APPLICATION_MODAL);
+        wrongStage.show();
+    }
+    public void showWarningInController(String s){
+        Platform.runLater(() -> {
+            FXMLLoader wrongLoader = new FXMLLoader(getClass().getResource("Warning.fxml"));
+            Stage wrongStage = new Stage();
+            try {
+                wrongStage.setScene(new Scene(wrongLoader.load()));
+                WarningController sc = wrongLoader.getController();
+                sc.setWarningTextLabel(s);
+            }catch (IOException e1){
+                return;
+            }
+            wrongStage.initModality(Modality.APPLICATION_MODAL);
+            wrongStage.show();
+        });
 
-        chatContentList.setCellFactory(new MessageCellFactory());
+    }
+    public Set<Set<String>> getCurrentGroups(){
+        Set<Set<String>> sets = new HashSet<>(currentGroups.keySet());
+        System.out.println(sets);
+        return sets;
+    }
+    public void closeStages(){
+        Platform.runLater(() -> {
+            currentGroups.values().forEach(Stage::close);
+        });
+    }
+
+    public void saveMessage(){
+        File directory = new File("cn.edu.sustech.cs209.chatting.client/"+user.getUserName());
+        File f = new File("cn.edu.sustech.cs209.chatting.client/"+user.getUserName()+"/messageMap");
+        if (!directory.exists()) {
+            directory.mkdirs();
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try (
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream os = new ObjectOutputStream(fos)) {
+            os.writeObject(messageRecord);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void readMessage(){
+        try (
+            FileInputStream fis = new FileInputStream("cn.edu.sustech.cs209.chatting.client/"+user.getUserName()+"/messageMap");
+            ObjectInputStream is = new ObjectInputStream(fis)) {
+            messageRecord = (MessageRecord) is.readObject();
+        } catch (IOException |ClassNotFoundException e) {
+            System.out.println("readMessage"+e.getMessage());
+        }
+    }
+
+    public void addRecent(String sendBy){
+        AtomicReference<String> s = new AtomicReference<>(sendBy);
+        boolean success = mostRecentMap.removeIf(c -> c.equals(s.get()));
+        mostRecentMap.add(0, s.get());
+    }
+
+    public void saveRecentOrder(){
+        File directory = new File("cn.edu.sustech.cs209.chatting.client/"+user.getUserName());
+        File f = new File("cn.edu.sustech.cs209.chatting.client/"+user.getUserName()+"/recentOrder");
+        if (!directory.exists()) {
+            directory.mkdirs();
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try (
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream os = new ObjectOutputStream(fos)) {
+            os.writeObject(mostRecentMap);
+            os.flush();
+        } catch (IOException e) {
+            System.out.println("saveRecentOrder"+e.getMessage());
+        }
+    }
+    public void readRecentOrder(){
+        try (
+            FileInputStream fis = new FileInputStream("cn.edu.sustech.cs209.chatting.client/"+user.getUserName()+"/recentOrder");
+            ObjectInputStream is = new ObjectInputStream(fis)) {
+            mostRecentMap = (CopyOnWriteArrayList<String>)  is.readObject();
+        } catch (IOException |ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
-    public void createPrivateChat() {
-        AtomicReference<String> user = new AtomicReference<>();
+    public void privateMouseEnter(MouseEvent event){
+        privateHBox.setStyle("-fx-background-color: #F57130;");
+        privateHBox.applyCss();
+        privateHBox.layout();
+    }
 
-        Stage stage = new Stage();
-        ComboBox<String> userSel = new ComboBox<>();
+    @FXML
+    public void privateMouseExit(MouseEvent event){
+        privateHBox.setStyle("-fx-background-color: transparent;");
+        privateHBox.applyCss();
+        privateHBox.layout();
+    }
 
-        // FIXME: get the user list from server, the current user's name should be filtered out
-        userSel.getItems().addAll("Item 1", "Item 2", "Item 3");
+    @FXML
+    public void groupMouseEnter(MouseEvent event){
+        groupHBox.setStyle("-fx-background-color: #F57130;");
+        groupHBox.applyCss();
+        groupHBox.layout();
+    }
 
-        Button okBtn = new Button("OK");
-        okBtn.setOnAction(e -> {
-            user.set(userSel.getSelectionModel().getSelectedItem());
-            stage.close();
-        });
+    @FXML
+    public void groupMouseExit(MouseEvent event){
+        groupHBox.setStyle("-fx-background-color: transparent;");
+        groupHBox.applyCss();
+        groupHBox.layout();
+    }
 
-        HBox box = new HBox(10);
-        box.setAlignment(Pos.CENTER);
-        box.setPadding(new Insets(20, 20, 20, 20));
-        box.getChildren().addAll(userSel, okBtn);
-        stage.setScene(new Scene(box));
-        stage.showAndWait();
+    @FXML
+    public void createPrivateChat(MouseEvent event) {
+        userContentList.applyCss();
+        userContentList.layout();
 
-        // TODO: if the current user already chatted with the selected user, just open the chat with that user
-        // TODO: otherwise, create a new chat item in the left panel, the title should be the selected user's name
+        System.out.println("selectedUsers: "+selectedUsers);
+        if(selectedUsers.size() != 1){
+            showWrongMessageInController("Private Group Only allow 2 persons in total!");
+            selectedUsers = new CopyOnWriteArraySet<>();
+            currentCheckBoxes.forEach(e -> e.setSelected(false));
+        }
+        else{
+            System.out.println("selectedUsers"+selectedUsers);
+            Set<Client> checkUsers = new CopyOnWriteArraySet<>(selectedUsers);
+            checkUsers.add(user);
+            Set<String> checkUsernames = checkUsers.stream().map(Client::getUserName).collect(
+                Collectors.toSet());
+            if(currentGroups.containsKey(checkUsernames)){
+                if(!currentGroups.get(checkUsernames).isShowing())
+                    currentGroups.get(checkUsernames).show();
+                currentGroups.get(checkUsernames).toFront();
+            }
+            else{
+                try {
+                    ClientApplication.createGroup(new HashSet<>(selectedUsers), user);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                showChatStage(checkUsers);
+            }
+            currentCheckBoxes.forEach(e -> e.setSelected(false));
+        }
     }
 
     /**
@@ -86,7 +310,37 @@ public class Controller implements Initializable {
      * UserA, UserB (2)
      */
     @FXML
-    public void createGroupChat() {
+    public void createGroupChat(MouseEvent event) {
+        userContentList.applyCss();
+        userContentList.layout();
+
+        System.out.println("selectedUsers: "+selectedUsers);
+        if(selectedUsers.size() <= 1){
+            showWrongMessageInController("Group Chats Only allow 3 persons or more in total!");
+            selectedUsers = new CopyOnWriteArraySet<>();
+            currentCheckBoxes.forEach(e -> e.setSelected(false));
+        }
+        else{
+            System.out.println("selectedUsers"+selectedUsers);
+            Set<Client> checkUsers = new CopyOnWriteArraySet<>(selectedUsers);
+            checkUsers.add(user);
+            Set<String> checkUsernames = checkUsers.stream().map(Client::getUserName).collect(
+                Collectors.toSet());
+            if(currentGroups.containsKey(checkUsernames)){
+                if(!currentGroups.get(checkUsernames).isShowing())
+                    currentGroups.get(checkUsernames).show();
+                currentGroups.get(checkUsernames).toFront();
+            }
+            else{
+                try {
+                    ClientApplication.createGroup(new HashSet<>(selectedUsers), user);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                showChatStage(checkUsers);
+            }
+            currentCheckBoxes.forEach(e -> e.setSelected(false));
+        }
     }
 
     /**
@@ -95,49 +349,165 @@ public class Controller implements Initializable {
      * Blank messages are not allowed.
      * After sending the message, you should clear the text input field.
      */
-    @FXML
-    public void doSendMessage() {
-        // TODO
+
+    public void remindMessage(Set<String> cls){
+        Platform.runLater(() -> {
+            FXMLLoader remindLoader = new FXMLLoader(getClass().getResource("MessageReminder.fxml"));
+            Parent remindRoot = null;
+            try {
+                remindRoot = remindLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // 创建一个Scene
+            Scene remindScene = new Scene(remindRoot);
+            // 创建一个Stage并设置Scene
+            Stage remindStage = new Stage();
+            ReminderController r = remindLoader.getController();
+            r.initializeStage(currentGroups.get(cls), remindStage);
+            remindStage.setScene(remindScene);
+            remindStage.initModality(Modality.APPLICATION_MODAL);
+            remindStage.show();
+            remindStage.toFront();
+        });
+
+    }
+    public void receiveMessage(HugeMessage h) {
+        if(h instanceof Message){
+            // show the message
+            Message m = (Message) h;
+            Set<String> sendTo = m.getSendTo();
+            sendTo.add(m.getSentBy());
+            System.out.println("receiveMessage: "+sendTo);
+            ChatController ctr = currentControllers.get(sendTo);
+            ctr.addMessage(m);
+            remindMessage(sendTo);
+        }
     }
 
-    /**
-     * You may change the cell factory if you changed the design of {@code Message} model.
-     * Hint: you may also define a cell factory for the chats displayed in the left panel, or simply override the toString method.
-     */
-    private class MessageCellFactory implements Callback<ListView<Message>, ListCell<Message>> {
+    public void showChatStage(Set<Client> groups){
+        Platform.runLater(() -> {
+
+            groups.add(user);
+            Set<String> usernames = groups.stream().map(Client::getUserName).collect(Collectors.toSet());
+            if(currentGroups.containsKey(groups)){
+                if(!currentGroups.get(usernames).isShowing())
+                    currentGroups.get(usernames).show();
+                currentGroups.get(usernames).toFront();
+            }
+            else{
+                FXMLLoader chatLoader = new FXMLLoader(getClass().getResource("Chat.fxml"));
+                Parent chatRoot = null;
+                try {
+                    chatRoot = chatLoader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // set ChatController
+                ChatController ctr = chatLoader.getController();
+                groups.add(user);
+                currentControllers.put(groups.stream().map(Client::getUserName).collect(Collectors.toSet()), ctr);
+                // 创建一个Scene
+                Scene chatScene = new Scene(chatRoot);
+
+                // 创建一个Stage并设置Scene
+                Stage chatStage = new Stage();
+                currentGroups.put(groups.stream().map(Client::getUserName).collect(Collectors.toSet()), chatStage);
+                chatStage.setScene(chatScene);
+                ctr.initializeClients(user, groups);
+                if(messageRecord.getRecord().containsKey(groups.stream().map(Client::getUserName).collect(Collectors.toSet()))){
+                    System.out.println("showChatStage: find records");
+                    ctr.addAllMessage(messageRecord.getRecord().get(groups.stream().map(Client::getUserName).collect(Collectors.toSet())));
+                }
+                chatStage.setOnCloseRequest(e -> {
+                    e.consume();
+                    // store the message into the map
+                    Set<String> cls = groups.stream().map(Client::getUserName).collect(Collectors.toSet());
+                    System.out.println("close"+ctr.getAllMessages().size());
+                    if(messageRecord.getRecord().containsKey(cls)){
+                        messageRecord.getRecord().replace(cls, ctr.getAllMessages());
+                    }
+                    else {
+                        messageRecord.getRecord().put(cls, ctr.getAllMessages());
+                    }
+                    saveMessage();
+                    chatStage.hide();
+                });
+                chatStage.show();
+                chatStage.toFront();
+            }
+
+        });
+    }
+
+
+    private class UserCellFactory implements Callback<ListView<Client>, ListCell<Client>> {
         @Override
-        public ListCell<Message> call(ListView<Message> param) {
-            return new ListCell<Message>() {
-
+        public ListCell<Client> call(ListView<Client> param) {
+            return new ListCell<Client>() {
                 @Override
-                public void updateItem(Message msg, boolean empty) {
-                    super.updateItem(msg, empty);
-                    if (empty || Objects.isNull(msg)) {
-                        return;
-                    }
+                public void updateItem(Client client, boolean empty) {
 
-                    HBox wrapper = new HBox();
-                    Label nameLabel = new Label(msg.getSentBy());
-                    Label msgLabel = new Label(msg.getData());
-
-                    nameLabel.setPrefSize(50, 20);
-                    nameLabel.setWrapText(true);
-                    nameLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-
-                    if (username.equals(msg.getSentBy())) {
-                        wrapper.setAlignment(Pos.TOP_RIGHT);
-                        wrapper.getChildren().addAll(msgLabel, nameLabel);
-                        msgLabel.setPadding(new Insets(0, 20, 0, 0));
-                    } else {
-                        wrapper.setAlignment(Pos.TOP_LEFT);
-                        wrapper.getChildren().addAll(nameLabel, msgLabel);
-                        msgLabel.setPadding(new Insets(0, 0, 0, 20));
-                    }
-
+                super.updateItem(client, empty);
+                if (empty || Objects.isNull(client) ) {
+                    setGraphic(null);
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    setGraphic(wrapper);
+                    return;
+                }
+                else if(user.getUserName().equals(client.getUserName())){
+                    System.out.println(client.getLogIn());
+                    setGraphic(null);
+                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    return;
+                }
+
+                HBox hBox = new HBox();
+                hBox.setPrefSize(300, 80);
+                StackPane imagePane = new StackPane();
+                imagePane.setPrefSize(80, 80);
+                AnchorPane anchorPane = new AnchorPane();
+                anchorPane.setPrefSize(220, 80);
+                hBox.getChildren().add(imagePane);
+                hBox.getChildren().add(anchorPane);
+
+                Label avatarLabel = new Label();
+                avatarLabel.setPrefSize(60, 60);
+                ImageView iv = new ImageView(client.getAvatar());
+                iv.setFitHeight(50);
+                iv.setFitWidth(50);
+                avatarLabel.setGraphic(iv);
+                imagePane.getChildren().add(avatarLabel);
+
+                Label usernameLabel = new Label();
+                usernameLabel.setText(client.getUserName());
+                usernameLabel.setStyle("-fx-font-size: 18px; -fx-font-family: \"Comic Sans MS\";");
+                anchorPane.getChildren().add(usernameLabel);
+                AnchorPane.setTopAnchor(usernameLabel, 10.0);
+
+                CheckBox checkBox = new CheckBox();
+                checkBox.setPrefSize(10, 10);
+                AnchorPane.setRightAnchor(checkBox, 10.0);
+                anchorPane.getChildren().add(checkBox);
+                currentCheckBoxes.add(checkBox);
+                checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                    // 处理状态变化
+                    if(oldValue && !newValue){
+                        selectedUsers.remove(client);
+                        selectedUsername.remove(client.getUserName());
+                    }
+                    else {
+                        selectedUsers.add(client);
+                        selectedUsername.add(client.getUserName());
+                    }
+                });
+
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                setGraphic(hBox);
                 }
             };
         }
     }
+
 }
