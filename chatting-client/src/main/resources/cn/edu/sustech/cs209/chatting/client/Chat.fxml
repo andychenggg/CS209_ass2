@@ -13,50 +13,54 @@
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.sustech.cs209.chatting.client.ChatController">
     <HBox fx:id="headBox" prefHeight="80.0" prefWidth="400.0">
         <StackPane prefHeight="80.0" prefWidth="65.0" stylesheets="@styles/ChatStyles.css">
-            <Label id="Person1" prefWidth="60" prefHeight="60"  stylesheets="@styles/ChatStyles.css"/>
+            <Label id="Person1" prefWidth="60" prefHeight="60" stylesheets="@styles/ChatStyles.css"/>
         </StackPane>
         <StackPane prefHeight="80.0" prefWidth="65.0" stylesheets="@styles/ChatStyles.css">
-            <Label id="Person2" prefWidth="60" prefHeight="60"  stylesheets="@styles/ChatStyles.css"/>
+            <Label id="Person2" prefWidth="60" prefHeight="60" stylesheets="@styles/ChatStyles.css"/>
         </StackPane>
         <StackPane prefHeight="80.0" prefWidth="65.0" stylesheets="@styles/ChatStyles.css">
-            <Label id="Person3" prefWidth="60" prefHeight="60"  stylesheets="@styles/ChatStyles.css"/>
+            <Label id="Person3" prefWidth="60" prefHeight="60" stylesheets="@styles/ChatStyles.css"/>
         </StackPane>
         <StackPane prefHeight="80.0" prefWidth="65.0" stylesheets="@styles/ChatStyles.css">
-            <Label id="Person4" prefWidth="60" prefHeight="60"  stylesheets="@styles/ChatStyles.css"/>
+            <Label id="Person4" prefWidth="60" prefHeight="60" stylesheets="@styles/ChatStyles.css"/>
         </StackPane>
         <StackPane prefHeight="80.0" prefWidth="65.0" stylesheets="@styles/ChatStyles.css">
-            <Label id="Person5" prefWidth="60" prefHeight="60"  stylesheets="@styles/ChatStyles.css"/>
+            <Label id="Person5" prefWidth="60" prefHeight="60" stylesheets="@styles/ChatStyles.css"/>
         </StackPane>
         <StackPane prefHeight="80.0" prefWidth="65.0" stylesheets="@styles/ChatStyles.css">
-            <Label id="Person6" prefWidth="60" prefHeight="60"  stylesheets="@styles/ChatStyles.css"/>
+            <Label id="Person6" prefWidth="60" prefHeight="60" stylesheets="@styles/ChatStyles.css"/>
         </StackPane>
     </HBox>
-    <ListView id="users" fx:id="messageList" minHeight="320.0" prefHeight="320.0" prefWidth="400.0" VBox.vgrow="ALWAYS" />
+    <ListView id="users" fx:id="messageList" minHeight="320.0" prefHeight="320.0" prefWidth="400.0"
+              VBox.vgrow="ALWAYS"/>
     <TabPane id="TabPane" prefHeight="210" prefWidth="400" styleClass="tab-pane" stylesheets="@styles/ChatStyles.css">
         <Tab fx:id="textTab" id="Tab1" closable="false" styleClass="tab1" onSelectionChanged="#handleTextTab">
             <StackPane id="TextPane" prefHeight="180" prefWidth="400"
-                       stylesheets="@styles/ChatStyles.css" >
-                <TextArea fx:id="Text" prefWidth="380" prefHeight="130" >
+                       stylesheets="@styles/ChatStyles.css">
+                <TextArea fx:id="Text" prefWidth="380" prefHeight="130">
 
                 </TextArea>
                 <Button fx:id="sendButton" id="SendButton" text="Send"
-                        onMouseClicked="#handleSendClick" onMouseEntered="#handleSendEnter" onMouseExited="#handleSendExit"
+                        onMouseClicked="#handleSendClick" onMouseEntered="#handleSendEnter"
+                        onMouseExited="#handleSendExit"
                         StackPane.alignment="BOTTOM_RIGHT" stylesheets="@styles/ChatStyles.css"/>
             </StackPane>
         </Tab>
         <Tab fx:id="fileTab" id="Tab3" closable="false" styleClass="tab3" onSelectionChanged="#handleFileTab">
             <HBox id="fileBox" prefHeight="180" prefWidth="400">
-            <StackPane prefHeight="180" prefWidth="90"
-                      onMouseClicked="#handleBrowseClick" onMouseEntered="#handleBrowseEnter" onMouseExited="#handleBrowseExit">
+                <StackPane prefHeight="180" prefWidth="90"
+                           onMouseClicked="#handleBrowseClick" onMouseEntered="#handleBrowseEnter"
+                           onMouseExited="#handleBrowseExit">
                     <Label prefHeight="60" prefWidth="60"
                            id="fileLabel" stylesheets="@styles/ChatStyles.css"/>
-            </StackPane>
-            <StackPane prefHeight="180" prefWidth="240"
-                       onMouseClicked="#handleBrowseClick" onMouseEntered="#handleBrowseEnter" onMouseExited="#handleBrowseExit">
-                <Button text="Browse Computer" prefHeight="60" prefWidth="240"
-                        fx:id="browseButton" id="browseButton" stylesheets="@styles/ChatStyles.css"
-                />
-            </StackPane>
+                </StackPane>
+                <StackPane prefHeight="180" prefWidth="240"
+                           onMouseClicked="#handleBrowseClick" onMouseEntered="#handleBrowseEnter"
+                           onMouseExited="#handleBrowseExit">
+                    <Button text="Browse Computer" prefHeight="60" prefWidth="240"
+                            fx:id="browseButton" id="browseButton" stylesheets="@styles/ChatStyles.css"
+                    />
+                </StackPane>
             </HBox>
         </Tab>
     </TabPane>

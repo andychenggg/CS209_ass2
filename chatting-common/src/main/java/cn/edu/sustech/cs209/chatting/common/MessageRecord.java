@@ -8,14 +8,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageRecord implements Serializable {
-    private String userName;
-    private ConcurrentHashMap<Set<String>, List<HugeMessage>> Record = new ConcurrentHashMap<>();
+  private String userName;
+  private ConcurrentHashMap<Set<String>, List<HugeMessage>> Record = new ConcurrentHashMap<>();
 
-    public MessageRecord(String userName){
-        this.userName = userName;
-    }
+  public MessageRecord(String userName) {
+    this.userName = userName;
+  }
 
-    public ConcurrentHashMap<Set<String>, List<HugeMessage>> getRecord(){
-        return Record;
-    }
+  public ConcurrentHashMap<Set<String>, List<HugeMessage>> getRecord() {
+    return Record;
+  }
 }

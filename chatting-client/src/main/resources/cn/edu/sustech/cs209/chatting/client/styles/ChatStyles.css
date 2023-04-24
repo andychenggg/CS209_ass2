@@ -1,15 +1,17 @@
-#vBox{
+#vBox {
     -fx-background-image: url("../image/Mainbg.png");
     -fx-background-color: transparent;
     -fx-background-size: stretch;
     -fx-background-position: center;
 }
-#Person1{
+
+#Person1 {
     -fx-background-image: url("../image/Avatar1.png");
     -fx-background-color: transparent;
     -fx-background-size: stretch;
     -fx-background-position: center;
 }
+
 /*#Person1{*/
 /*    -fx-background-image: url("../image/Avatar1.png");*/
 /*    -fx-background-color: transparent;*/
@@ -47,7 +49,7 @@
 /*    -fx-background-position: center;*/
 /*}*/
 
-.tab1{
+.tab1 {
     -fx-background-color: transparent;
     -fx-background-image: url("../image/Chat.png");
     -fx-background-size: stretch;
@@ -60,6 +62,7 @@
     -fx-border-width: 3px;
     -fx-border-insets: 0px 0px -3px 0px;
 }
+
 /*.tab2{*/
 /*    -fx-background-color: transparent;*/
 /*    -fx-background-image: url("../image/emoji.png");*/
@@ -70,7 +73,7 @@
 /*    -fx-pref-height: 30px;*/
 /*    -fx-focus-color: transparent;*/
 /*}*/
-.tab3{
+.tab3 {
     -fx-background-color: transparent;
     -fx-background-image: url("../image/File.png");
     -fx-background-size: stretch;
@@ -80,6 +83,7 @@
     -fx-pref-height: 30px;
     -fx-focus-color: transparent;
 }
+
 /*.tab-pane > .tab-header-area {*/
 /*    -fx-background-color: transparent;*/
 /*}*/
@@ -87,11 +91,13 @@
     -fx-background-color: transparent;
     /*-fx-opacity: 0;*/
 }
-#TextPane{
+
+#TextPane {
     -fx-border-color: #0A7BFD;
     -fx-border-width: 6px;
 }
-#SendButton{
+
+#SendButton {
     -fx-pref-height: 30;
     -fx-pref-width: 80;
     -fx-background-color: transparent;
@@ -103,33 +109,37 @@
     -fx-text-fill: #0A7BFD;
 }
 
-.tab-pane{
+.tab-pane {
     -fx-padding: 10 10 10 10;
     -fx-background-color: transparent;
     -fx-background-image: url("../image/GroupBG.png");
 }
 
-#label{
+#label {
     -fx-font-family: "EmojiOne";
     -fx-font-size: 24;
 }
-#browseButton{
+
+#browseButton {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 23;
     -fx-text-fill: #0A7BFD;
     -fx-background-color: transparent;
 }
-#fileLabel{
+
+#fileLabel {
     -fx-background-color: transparent;
     -fx-background-image: url("../image/File1.png");
     -fx-background-size: stretch;
     -fx-background-position: center;
 }
-#filePane{
+
+#filePane {
     -fx-border-color: #0A7BFD;
     -fx-border-width: 6px;
 }
-#fileBox{
+
+#fileBox {
     -fx-border-color: white;
     -fx-border-width: 6px;
 }

@@ -7,12 +7,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
 public class WrongMessageController implements Initializable {
-    @FXML private Label WrongTextLabel;
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+  @FXML
+  private Label WrongTextLabel;
 
-    }
-    public void setWrongTextLabel(String criticalMessage){
-        WrongTextLabel.setText("Error: "+criticalMessage);
-    }
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+
+  }
+
+  public void setWrongTextLabel(String criticalMessage) {
+    WrongTextLabel.setText("Error: " + criticalMessage);
+  }
 }

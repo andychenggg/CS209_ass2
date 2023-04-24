@@ -17,44 +17,45 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class ReminderController implements Initializable {
-    @FXML
-    private Button viewButton;
-    private Stage chatStage;
-    private Stage currentStage;
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+  @FXML
+  private Button viewButton;
+  private Stage chatStage;
+  private Stage currentStage;
 
-    }
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
 
-    public void initializeStage(Stage s, Stage t){
-        chatStage = s;
-        currentStage = t;
-    }
+  }
 
-    @FXML
-    public void handleViewClick(MouseEvent event) {
-        // 处理按钮点击事件
-        viewButton.setStyle(
-            "-fx-background-color: transparent;-fx-text-fill: #0A7BFD;");
-        viewButton.applyCss();
-        viewButton.layout();
-        chatStage.toFront();
-        currentStage.close();
-    }
+  public void initializeStage(Stage s, Stage t) {
+    chatStage = s;
+    currentStage = t;
+  }
 
-    @FXML
-    public void handleViewEnter(MouseEvent event) {
-        // 处理鼠标进入事件
-        viewButton.setStyle(
-            "-fx-background-color: #0A7BFD;" +
-                "-fx-text-fill: white;");
-    }
+  @FXML
+  public void handleViewClick(MouseEvent event) {
+    // 处理按钮点击事件
+    viewButton.setStyle(
+        "-fx-background-color: transparent;-fx-text-fill: #0A7BFD;");
+    viewButton.applyCss();
+    viewButton.layout();
+    chatStage.toFront();
+    currentStage.close();
+  }
 
-    @FXML
-    public void handleViewExit(MouseEvent event) {
-        // 处理鼠标离开事件
-        viewButton.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #0A7BFD;");
-    }
+  @FXML
+  public void handleViewEnter(MouseEvent event) {
+    // 处理鼠标进入事件
+    viewButton.setStyle(
+        "-fx-background-color: #0A7BFD;" +
+            "-fx-text-fill: white;");
+  }
+
+  @FXML
+  public void handleViewExit(MouseEvent event) {
+    // 处理鼠标离开事件
+    viewButton.setStyle(
+        "-fx-background-color: transparent; -fx-text-fill: #0A7BFD;");
+  }
 
 }
